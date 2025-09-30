@@ -35,6 +35,27 @@ const App = () => {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await firebase.signInWithGoogle();
+      const user = result.user;
+
+      // Save user info to DB
+      await firebase.putData("users/" + user.uid, {
+        email: user.email,
+        name: user.displayName,
+        photo: user.photoURL,
+      });
+
+      alert("Google login successful!");
+      console.log("Google User:", user);
+    } catch (error) {
+      console.error("Google login error:", error);
+      alert(error.message);
+    }
+  };
+
+
   return (
     <div>
       <h1>Firebase Auth + DB</h1>
@@ -50,6 +71,7 @@ const App = () => {
         type="password"
         placeholder="Enter Password"
       />
+      <button onClick={handleGoogleLogin}>Signin With Google</button>
       <button onClick={handleSignUp}>Sign Up</button>
     </div>
   );

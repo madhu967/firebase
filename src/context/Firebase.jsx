@@ -1,13 +1,13 @@
 import { createContext, useContext } from "react";
 import { initializeApp, getApps } from "firebase/app";
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword,GoogleAuthProvider,signInWithPopup } from "firebase/auth";
 import { getDatabase, set, ref } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBj2nkpGT2J_ZPuhbjkoIzUzmLtqhFKfF8",
   authDomain: "eternal-concept-472518-i0.firebaseapp.com",
   projectId: "eternal-concept-472518-i0",
-  storageBucket: "eternal-concept-472518-i0.appspot.com", // ✅ fixed
+  storageBucket: "eternal-concept-472518-i0.appspot.com",
   messagingSenderId: "1097703156042",
   appId: "1:1097703156042:web:b1b945a8d28b1acfff39b3",
   measurementId: "G-B57B9TPVZV",
@@ -31,10 +31,16 @@ export const FirebaseProvider = ({ children }) => {
     return signInWithEmailAndPassword(firebaseAuth, email, password);
   };
 
+   const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    return await signInWithPopup(firebaseAuth, provider);
+  };
+
+
   const putData = (key, data) => set(ref(database, key), data);
 
   return (
-    <FirebaseContext.Provider value={{ signupUserWithEmailAndPassword, signInUserWithEmailAndPassword, putData }}>
+    <FirebaseContext.Provider value={{ signupUserWithEmailAndPassword, signInUserWithEmailAndPassword, putData,signInWithGoogle }}>
       {children}
     </FirebaseContext.Provider>
   );
