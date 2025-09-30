@@ -18,9 +18,8 @@ const App = () => {
 
     try {
       const userCredential = await firebase.signupUserWithEmailAndPassword(email, password);
-      const uid = userCredential.user.uid; // ✅ safe key
+      const uid = userCredential.user.uid;
 
-      // Save only email (not password)
       await firebase.putData("users/" + uid, { email });
 
       alert("Signup successful!");
@@ -40,7 +39,6 @@ const App = () => {
       const result = await firebase.signInWithGoogle();
       const user = result.user;
 
-      // Save user info to DB
       await firebase.putData("users/" + user.uid, {
         email: user.email,
         name: user.displayName,
@@ -55,24 +53,39 @@ const App = () => {
     }
   };
 
-
   return (
-    <div>
-      <h1>Firebase Auth + DB</h1>
-      <input
-        onChange={(e) => setEmail(e.target.value)}
-        value={email}
-        type="email"
-        placeholder="Enter Email"
-      />
-      <input
-        onChange={(e) => setPassword(e.target.value)}
-        value={password}
-        type="password"
-        placeholder="Enter Password"
-      />
-      <button onClick={handleGoogleLogin}>Signin With Google</button>
-      <button onClick={handleSignUp}>Sign Up</button>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
+        <h1 className="text-2xl font-bold text-center mb-6">Firebase Auth + DB</h1>
+        
+        <input
+          onChange={(e) => setEmail(e.target.value)}
+          value={email}
+          type="email"
+          placeholder="Enter Email"
+          className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <input
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
+          type="password"
+          placeholder="Enter Password"
+          className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+
+        <button
+          onClick={handleGoogleLogin}
+          className="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 mb-3 transition"
+        >
+          Sign in with Google
+        </button>
+        <button
+          onClick={handleSignUp}
+          className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
+        >
+          Sign Up
+        </button>
+      </div>
     </div>
   );
 };
